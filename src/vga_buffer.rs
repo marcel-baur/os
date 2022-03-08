@@ -149,3 +149,25 @@ pub fn _print(args: fmt::Arguments) {
     use core::fmt::Write;
     WRITER.lock().write_fmt(args).unwrap();
 }
+
+#[test_case]
+fn test_println_simple() {
+    println!("no args println");
+}
+
+#[test_case]
+fn test_println_loop() {
+    for _ in 0..200 {
+        println!("loop println");
+    }
+}
+
+#[test_case]
+fn verify_println_output() {
+    let s = "Single line test string";
+    println!("{}", s);
+    for (i, c) in s.chars().enumerate() {
+        let screen_char = WRITER.lock().buffer.chars[BUFFER_HEIGHT -2][i].read();
+        assert_eq!(char::from(screen_char.ascii_character), c);
+    }
+}
